@@ -1,0 +1,56 @@
+{{!-- That's a simple page allowing you to change the personal data and see the users list. Illogical? Yes it is! --}}
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="text-center pt-5">Welcome, {{username}}</h1>
+      <form id="form">
+        <div class="mb-3">
+          <label for="phone" class="form-label">Add or change your  phone</label>
+          <input type="tel" minlength="10" required class="form-control" id="phone">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+      </form>
+    </div>
+    <div class="col-12 pt-5">
+      <ul class="list-group">
+        {{#each users}}
+          <li class="list-group-item">
+            <span>Username: <b>{{this.username}}</b></span>
+            <span>-</span> 
+            <span>Phone: <b>{{this.phone}}</b></span>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+  const form = document.querySelector('#form');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const phone = document.querySelector('#phone').value;
+
+  try{
+    let response = await fetch('/api/users/phone', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        phone,
+      })
+    })
+
+    //Updating everything fast and smoothly
+    alert('Updated');
+    location.reload();
+  }catch(e){
+    console.log(e);
+  }
+})
+</script>

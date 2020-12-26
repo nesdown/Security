@@ -1,0 +1,62 @@
+<div class="container">
+  <div class="row pt-4">
+    <div class="col-12 pt-5">
+      <h1 class="text-center">
+        PLEASE REGISTER
+      </h1>
+      <hr/>
+    </div>
+    <div class="col-12 pt-5">
+      <form autocomplete="off" id="form">
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" required class="form-control" id="username" aria-describedby="username">
+          <div class="form-text">We'll never share your email with anyone else.</div>
+        </div>
+        {{!-- Again, password length is no less than 8 symbols. --}}
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" required minlength="8" class="form-control" id="password">
+        </div>
+        <div class="mb-3">
+          <label for="repeat-password" class="form-label">Confirm Password</label>
+          <input type="password" required minlength="8" class="form-control" id="repeat-password">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+const form = document.querySelector('#form');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const username = document.querySelector('#username').value;
+  const password = document.querySelector('#password').value;
+  const repeatPassword = document.querySelector('#repeat-password').value;
+
+  //And here we are awaiting for the response
+  try{
+    let response = await fetch('/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username,
+        password,
+        repeatPassword
+      })
+    })
+
+    await response.json();
+
+    alert('Registered');
+  }catch(e){
+    alert('Error');
+    console.log(e);
+  }
+})
+</script>

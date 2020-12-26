@@ -1,0 +1,74 @@
+<div class="container">
+  <div class="row pt-4">
+    <div class="col-12">
+      
+      {{!-- Setup a set of errors for different troubles --}}
+      {{#each errors}}
+          <div class="alert alert-danger" role="alert">
+            {{this}}
+          </div>
+      {{/each}}
+    </div>
+    <div class="col-12 pt-5">
+      <h1 class="text-center">
+        PLEASE LOGIN
+      </h1>
+      <hr/>
+    </div>
+
+    {{!-- Just a simple and shiny login form --}}
+    <div class="col-12 pt-5">
+      <form autocomplete="off" id="form">
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" required class="form-control" id="username" aria-describedby="username">
+          {{!-- But if you act badly, we will. --}}
+          <div class="form-text">We'll never share your email with anyone else.</div>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          {{!-- the password is set to be minimum 8 symbols --}}
+          <input type="password" required minlength="8" class="form-control" id="password">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+const form = document.querySelector('#form');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const username = document.querySelector('#username').value;
+  const password = document.querySelector('#password').value;
+
+  // Have the result sent as json from form
+  try{
+    let response = await fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username,
+        password,
+      })
+    })
+
+    // if ok then ok, if not then not ok :(
+    if(response.ok){
+      response = await response.json();
+
+      alert('Logged In');
+    }else{
+      throw new Error();
+    }
+  }catch(e){
+    alert("username or email is not valid");
+    console.log(e);
+  }
+})
+</script>
